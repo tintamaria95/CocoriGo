@@ -3,34 +3,9 @@ import tensorflow.keras as keras
 import numpy as np
 from tensorflow.keras import layers 
 from tensorflow.keras import regularizers
-import gc
-
-import golois
 
 planes = 31
-moves = 361
-N = 10000
-epochs = 20
-batch = 128
 filters = 32
-
-input_data = np.random.randint(2, size=(N, 19, 19, planes))
-input_data = input_data.astype ('float32')
-
-policy = np.random.randint(moves, size=(N,))
-policy = keras.utils.to_categorical (policy)
-
-value = np.random.randint(2, size=(N,))
-value = value.astype ('float32')
-
-end = np.random.randint(2, size=(N, 19, 19, 2))
-end = end.astype ('float32')
-
-groups = np.zeros((N, 19, 19, 1))
-groups = groups.astype ('float32')
-
-print ("getValidation", flush = True)
-golois.getValidation (input_data, policy, value, end)
 
 
 input = keras.Input(shape=(19, 19, planes), name='board')
@@ -57,3 +32,5 @@ model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.005, momentum=0.9),
               loss={'policy': 'categorical_crossentropy', 'value': 'binary_crossentropy'},
               loss_weights={'policy' : 1.0, 'value' : 1.0},
               metrics={'policy': 'categorical_accuracy', 'value': 'mse'})
+model.save ('test.h5')
+plt.show(keras.utils.plot_model(model, str('test_0' + ".png"), show_shapes=True))
